@@ -22,8 +22,10 @@ public class UIController extends Application implements IUIController
     private MenuBar menuBar;
     private TabPane tabPane;
     private static UIController uiController;
-    private TableView<IBook> table;
+    private TableView<IBook> tableBook;
+    private TableView<IUser> tableUser;
     private ObservableList<IBook> bookList = FXCollections.observableArrayList();
+    private ObservableList<IUser> userList = FXCollections.observableArrayList();
 
     public UIController() {
     }
@@ -46,8 +48,13 @@ public class UIController extends Application implements IUIController
         menuBar.getMenus().add(new Menu("Livro"));
         MenuItem menuItem = createMenuItem("Livro", "Cadastro");
         menuBar.getMenus().get(0).getItems().add(menuItem);
+        MenuItem menuItem2 = createMenuItem("Usuário", "Cadastro");
+        menuBar.getMenus().get(0).getItems().add(menuItem2);
         menuItem.setOnAction(e -> {
             openBookTab();
+        });
+        menuItem2.setOnAction(e -> {
+            openUserTab();
         });
         VBox vBox = new VBox(menuBar);
 
@@ -126,7 +133,7 @@ public class UIController extends Application implements IUIController
             if (bookController.requestCreateBook(title, ISBN, author, genre, year)) {
                 IBook book = bookController.createBook(title, ISBN, author, genre, year);
                 bookList.add(book);  // Atualiza a ObservableList
-                table.refresh();  // Atualiza a exibição da tabela
+                tableBook.refresh();  // Atualiza a exibição da tabela
                 titleField.clear();
                 isbnField.clear();
                 authorField.clear();
@@ -139,7 +146,7 @@ public class UIController extends Application implements IUIController
         });
 
         // Criando a Tabela
-        table = new TableView<>(bookList); // Inicializa com a lista
+        tableBook = new TableView<>(bookList); // Inicializa com a lista
 
         TableColumn<IBook, String> titleCol = new TableColumn<>("Título");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -156,16 +163,70 @@ public class UIController extends Application implements IUIController
         TableColumn<IBook, String> yearCol = new TableColumn<>("Ano");
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
 
-        Collections.addAll(table.getColumns(), titleCol, isbnCol, authorCol, genreCol, yearCol);
-        table.setItems(bookList);
+        Collections.addAll(tableBook.getColumns(), titleCol, isbnCol, authorCol, genreCol, yearCol);
+        tableBook.setItems(bookList);
 
 
         // Criar o layout da aba
-        VBox layout = new VBox(10, titleField, isbnField, authorField, genreField, yearField, saveButton, table);
+        VBox layout = new VBox(10, titleField, isbnField, authorField, genreField, yearField, saveButton, tableBook);
         layout.setPadding(new javafx.geometry.Insets(10));
 
         // Criar a aba no UIController
         createTab("Cadastro de Livros", layout);
+    }
+
+    public void openUserTab() {
+        
+        TextField nameField = new TextField();
+        nameField.setPromptText("Nome");
+        
+        TextField emailField = new TextField();
+        emailField.setPromptText("E-mail");
+        
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Senha");
+
+        // Botão para salvar
+        Button saveButton = new Button("Salvar");
+        saveButton.setOnAction(e -> {
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String password = passwordField.getText();
+        
+            var userController = Core.getInstance().getUserController();
+            if (userController.requestCreateUser(name, email, password)) {
+                IUser user = userController.createUser(name, email, password);
+                userList.add(user);  // Atualiza a ObservableList
+                tableUser.refresh();  // Atualiza a exibição da tabela
+                nameField.clear();
+                emailField.clear();
+                passwordField.clear();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao adicionar Usuário!", ButtonType.OK);
+                alert.showAndWait();
+            }
+        });
+
+        // Criando a Tabela
+        tableUser = new TableView<>(userList); // Inicializa com a lista
+
+        TableColumn<IUser, String> nameCol = new TableColumn<>("Nome");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<IUser, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+
+        Collections.addAll(tableUser.getColumns(), nameCol, emailCol);
+        tableUser.setItems(userList);
+
+
+        // Criar o layout da aba
+        VBox layout = new VBox(10, nameField, emailField, passwordField,  saveButton, tableUser);
+        layout.setPadding(new javafx.geometry.Insets(10));
+
+        // Criar a aba no UIController
+        createTab("Cadastro de Usuários", layout);
     }
 }
 
