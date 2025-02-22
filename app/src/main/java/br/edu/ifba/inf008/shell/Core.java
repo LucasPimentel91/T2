@@ -32,7 +32,12 @@ public class Core extends ICore
         return pluginController;
     }
 
+    public IBookController getBookController() {
+        return bookController;
+    }
+
     private IAuthenticationController authenticationController = new AuthenticationController();
     private IIOController ioController = new IOController();
     private IPluginController pluginController = new PluginController();
+    private IBookController bookController = new BookController();
 }

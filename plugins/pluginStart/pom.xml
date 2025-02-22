@@ -10,7 +10,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>bookPlugin</artifactId>
+    <artifactId>pluginStart</artifactId>
 
     <dependencies>
         <dependency>
@@ -31,8 +31,6 @@
                     <!-- Change the output directory -->
                     <outputDirectory>${project.basedir}/../</outputDirectory>
                     <!-- Change the JAR file name -->
-                    <finalName>Book</finalName>
-                    <finalName>BookPlugin</finalName>
                     <finalName>MyPlugin</finalName>
                 </configuration>
             </plugin>
