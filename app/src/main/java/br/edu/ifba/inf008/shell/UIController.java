@@ -39,7 +39,6 @@ public class UIController extends Application implements IUIController
         return uiController;
     }
 
-    @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Sua Biblioteca");
         

@@ -54,4 +54,8 @@ public class BookController implements IBookController {
             bookList.add(book);
         }
     }
+
+    public boolean thisBookExists(IBook book) {
+        return bookList.contains(book);
+    }
 }

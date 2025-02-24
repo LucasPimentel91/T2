@@ -42,4 +42,8 @@ public class UserController implements IUserController {
     public void addUser(IUser user) {
         userList.add(user);
     }
+
+    public boolean thisUserExists(IUser user) {
+        return userList.contains(user);
+    }
 }
