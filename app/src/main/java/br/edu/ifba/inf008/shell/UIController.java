@@ -3,6 +3,7 @@ package br.edu.ifba.inf008.shell;
 import br.edu.ifba.inf008.interfaces.*;
 import br.edu.ifba.inf008.shell.PluginController;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -24,8 +25,10 @@ public class UIController extends Application implements IUIController
     private static UIController uiController;
     private TableView<IBook> tableBook;
     private TableView<IUser> tableUser;
+    private TableView<ILoan> tableLoan;
     private ObservableList<IBook> bookList = FXCollections.observableArrayList();
     private ObservableList<IUser> userList = FXCollections.observableArrayList();
+    private ObservableList<ILoan> loanList = FXCollections.observableArrayList();
 
     public UIController() {
     }
@@ -49,11 +52,16 @@ public class UIController extends Application implements IUIController
         menuBar.getMenus().get(0).getItems().add(menuItem);
         MenuItem menuItem2 = createMenuItem("Usuário", "Cadastro");
         menuBar.getMenus().get(0).getItems().add(menuItem2);
+        MenuItem menuItem3 = createMenuItem("Empréstimo", "Fazer empréstimo");
+        menuBar.getMenus().get(0).getItems().add(menuItem3);
         menuItem.setOnAction(e -> {
             openBookTab();
         });
         menuItem2.setOnAction(e -> {
             openUserTab();
+        });
+        menuItem3.setOnAction(e -> {
+            openLoanTab();
         });
         VBox vBox = new VBox(menuBar);
 
@@ -227,5 +235,58 @@ public class UIController extends Application implements IUIController
         // Criar a aba no UIController
         createTab("Cadastro de Usuários", layout);
     }
+
+    public void openLoanTab() {
+        Stage stage = new Stage();
+        stage.setTitle("Gerenciar Empréstimos");
+
+        ComboBox<IUser> userComboBox = new ComboBox<>(userList);
+        userComboBox.setPromptText("Selecione um Usuário");
+        
+        ComboBox<IBook> bookComboBox = new ComboBox<>(bookList);
+        bookComboBox.setPromptText("Selecione um Livro");
+        
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+        
+
+        var loanController = Core.getInstance().getLoanController();
+        Button saveButton = new Button("Realizar Empréstimo");
+        saveButton.setOnAction(e -> {
+            IUser user = userComboBox.getValue();
+            IBook book = bookComboBox.getValue();
+            LocalDate dateLoan = datePicker.getValue();
+            
+            if (user == null || book == null || dateLoan == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Preencha todos os campos", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+            
+            ILoan loan = loanController.setLoan(user, book, dateLoan, loanController.setDateReturn());
+            loanList.add(loan);
+            tableLoan.setItems(loanList);
+            tableUser.refresh();
+            Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
+            success.showAndWait();
+        });
+        
+        tableLoan = new TableView<>();
+        TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
+        userCol.setCellValueFactory(new PropertyValueFactory<>("user"));
+        
+        TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
+        bookCol.setCellValueFactory(new PropertyValueFactory<>("book"));
+        
+        TableColumn<ILoan, String> dateCol = new TableColumn<>("Data");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateLoan"));
+        
+        Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateCol);
+        
+        VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
+        Scene scene = new Scene(layout, 500, 400);
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }
 

@@ -40,9 +40,14 @@ public class Core extends ICore
         return userController;
     }
 
+    public ILoanController getLoanController(){
+        return loanController;
+    }
+
     private IAuthenticationController authenticationController = new AuthenticationController();
     private IIOController ioController = new IOController();
     private IPluginController pluginController = new PluginController();
     private IBookController bookController = new BookController();
     private IUserController userController = new UserController();
+    private ILoanController loanController = new LoanController();
 }

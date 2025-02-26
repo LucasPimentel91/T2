@@ -51,7 +51,7 @@ public class LoanController implements ILoanController {
         return LocalDate.now().toString();
     }
 
-    public ILoan setLoan(IUser user, IBook book, String dateLoan, String dateReturn) {
+    public ILoan setLoan(IUser user, IBook book, LocalDate dateLoan, String dateReturn) {
         if (requestSetLoan(user, book)) {
             ILoan loan = new Loan(getId(), user, book, dateLoan, dateReturn);
             addLoan(loan);
