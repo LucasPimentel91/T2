@@ -6,6 +6,7 @@ public class User implements IUser {
     private String name;
     private String email;
     private String password;
+    private ArrayList<IBook> listBooksLoan = new ArrayList();
 
     public User(String name, String email, String password) {
         this.name = name;
@@ -28,4 +29,9 @@ public class User implements IUser {
     public String toString(){
         return getName();
     }
+
+    public ArrayList<IBook> myListBooks(){
+        return listBooksLoan;
+    }
+
 }

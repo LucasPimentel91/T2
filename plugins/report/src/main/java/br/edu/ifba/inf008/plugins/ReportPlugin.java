@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
 
 public class ReportPlugin implements IPlugin {
 
@@ -20,12 +21,14 @@ public class ReportPlugin implements IPlugin {
         IUIController uiController = ICore.getInstance().getUIController();
 
         MenuItem menuItem = uiController.createMenuItem("Relatório", "Emprestados");
-        menuItem.setOnAction(e -> showReport(uiController));
+        menuItem.setOnAction(e -> { 
+            showReportLoans(uiController);
+    });
 
         return true;
     }
 
-    private void showReport(IUIController uiController) {
+    private void showReportLoans(IUIController uiController) {
         ObservableList<ILoan> loanList = uiController.getObListLoan();
         Stage reportStage = new Stage();
         reportStage.setTitle("Relatório de Empréstimos");
@@ -33,13 +36,13 @@ public class ReportPlugin implements IPlugin {
         TableView<ILoan> reportTable = new TableView<>(loanList);
 
         TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
-        userCol.setCellValueFactory(data -> data.getValue().usuarioProperty());
+        userCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser().toString()));
 
         TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
-        bookCol.setCellValueFactory(data -> data.getValue().livroProperty());
+        bookCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBook().toString()));
 
         TableColumn<ILoan, String> dateCol = new TableColumn<>("Data");
-        dateCol.setCellValueFactory(data -> data.getValue().dataEmprestimoProperty());
+        dateCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateLoan().toString()));
 
         reportTable.getColumns().addAll(userCol, bookCol, dateCol);
 

@@ -46,4 +46,8 @@ public class UserController implements IUserController {
     public boolean thisUserExists(IUser user) {
         return userList.contains(user);
     }
+
+    public ArrayList<IBook> getListBooks(IUser user){
+        return user.myListBooks();
+    }
 }

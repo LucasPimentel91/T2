@@ -11,4 +11,5 @@ public interface IUserController {
     public boolean thisUserExists(IUser user);
     public ArrayList<IUser> getUserList();
     public void addUser(IUser user);
+    public ArrayList<IBook> getListBooks(IUser user);
 }

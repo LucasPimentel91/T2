@@ -260,7 +260,7 @@ public class UIController extends Application implements IUIController
         
         DatePicker datePicker = new DatePicker(LocalDate.now());
         
-
+        var userController = Core.getInstance().getUserController();
         var loanController = Core.getInstance().getLoanController();
         Button saveButton = new Button("Realizar Empréstimo");
         saveButton.setOnAction(e -> {
@@ -275,8 +275,9 @@ public class UIController extends Application implements IUIController
             }
             
             ILoan loan = loanController.setLoan(user, book, dateLoan, loanController.setDateReturn());
+            userController.getListBooks(user).add(book);
             loanList.add(loan);
-            tableUser.refresh();
+            tableLoan.refresh();
             tableLoan.setItems(loanList);
             Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
             success.showAndWait();
