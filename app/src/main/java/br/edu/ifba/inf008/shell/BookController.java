@@ -58,4 +58,8 @@ public class BookController implements IBookController {
     public boolean thisBookExists(IBook book) {
         return bookList.contains(book);
     }
+
+    public void isLoan(IBook book){
+        book.isLoan();
+    }
 }

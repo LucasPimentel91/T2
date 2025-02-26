@@ -24,4 +24,8 @@ public class User implements IUser {
     public String getPassword(){
         return password;
     }
+
+    public String toString(){
+        return getName();
+    }
 }

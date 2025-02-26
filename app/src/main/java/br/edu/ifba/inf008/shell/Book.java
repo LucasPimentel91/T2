@@ -8,6 +8,7 @@ public class Book implements IBook {
     private String author;
     private String genre;
     private String year;
+    private Boolean status = false;
 
     public Book(String title, String ISBN, String author, String genre, String year) {
         this.title = title;
@@ -35,6 +36,14 @@ public class Book implements IBook {
 
     public String getYear() {  // O erro estava aqui
         return year;
+    }
+
+    public void isLoan(){
+        status = true;
+    }
+
+    public void returned(){
+        status = false;
     }
 
     @Override

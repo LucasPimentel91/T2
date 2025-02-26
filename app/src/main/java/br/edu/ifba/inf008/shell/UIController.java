@@ -139,6 +139,7 @@ public class UIController extends Application implements IUIController
             var bookController = Core.getInstance().getBookController();
             if (bookController.requestCreateBook(title, ISBN, author, genre, year)) {
                 IBook book = bookController.createBook(title, ISBN, author, genre, year);
+                bookController.isLoan(book);
                 bookList.add(book);  // Atualiza a ObservableList
                 tableBook.refresh();  // Atualiza a exibição da tabela
                 titleField.clear();
@@ -242,7 +243,18 @@ public class UIController extends Application implements IUIController
 
         ComboBox<IUser> userComboBox = new ComboBox<>(userList);
         userComboBox.setPromptText("Selecione um Usuário");
-        
+        /*userComboBox.setConverter(new StringConverter<IUser>(){
+            @Override
+            public String toString(IUser user) {
+                return user != null ? user.getNome() : "";
+            }
+
+            @Override
+            public IUser fromString(String string) {
+                return null;
+            }
+        });*/
+
         ComboBox<IBook> bookComboBox = new ComboBox<>(bookList);
         bookComboBox.setPromptText("Selecione um Livro");
         
@@ -264,8 +276,8 @@ public class UIController extends Application implements IUIController
             
             ILoan loan = loanController.setLoan(user, book, dateLoan, loanController.setDateReturn());
             loanList.add(loan);
-            tableLoan.setItems(loanList);
             tableUser.refresh();
+            tableLoan.setItems(loanList);
             Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
             success.showAndWait();
         });
@@ -288,5 +300,9 @@ public class UIController extends Application implements IUIController
         stage.show();
     }
 
+
+    public ObservableList<ILoan> getObListLoan(){
+        return loanList;
+    }
 }
 

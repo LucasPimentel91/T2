@@ -11,7 +11,7 @@
     <modules>
         <module>interfaces</module>
         <module>app</module>
-        <module>plugins/pluginStart</module>
+        <module>plugins/report</module>
     </modules>
 
     <properties>

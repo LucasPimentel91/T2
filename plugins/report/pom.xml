@@ -10,7 +10,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>pluginStart</artifactId>
+    <artifactId>report</artifactId>
 
     <dependencies>
         <dependency>
@@ -31,7 +31,7 @@
                     <!-- Change the output directory -->
                     <outputDirectory>${project.basedir}/../</outputDirectory>
                     <!-- Change the JAR file name -->
-                    <finalName>MyPlugin</finalName>
+                    <finalName>ReportPlugin</finalName>
                 </configuration>
             </plugin>
         </plugins>

@@ -13,5 +13,6 @@ public interface IBookController {
     public boolean thisBookExists(IBook book);
     public ArrayList<IBook> getBookList();
     public void addBook(IBook book);
+    public void isLoan(IBook book);
 
 }

@@ -11,6 +11,7 @@ public class Loan implements ILoan {
     private LocalDate loanDate;
     private String returnDate;
     
+    
     public Loan(int id, IUser userInstance, IBook bookInstance, LocalDate loanDate, String returnDate) {
         this.id = id;
         this.userInstance = userInstance;
@@ -30,5 +31,6 @@ public class Loan implements ILoan {
     public LocalDate getDateLoan(){
         return loanDate;
     }
+
 
 }
