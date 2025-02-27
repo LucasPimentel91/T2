@@ -1,17 +1,19 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.interfaces.IUser;
+import br.edu.ifba.inf008.interfaces.*;
+import java.util.ArrayList;
 
 public class User implements IUser {
     private String name;
     private String email;
     private String password;
-    private ArrayList<IBook> listBooksLoan = new ArrayList();
+    private ArrayList<IBook> listBooksLoan;
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.listBooksLoan = new ArrayList<IBook>();
     }
 
     public String getName() {

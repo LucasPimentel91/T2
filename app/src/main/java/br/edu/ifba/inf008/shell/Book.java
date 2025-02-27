@@ -8,7 +8,7 @@ public class Book implements IBook {
     private String author;
     private String genre;
     private String year;
-    private Boolean status = false;
+    private Boolean status;
 
     public Book(String title, String ISBN, String author, String genre, String year) {
         this.title = title;
@@ -16,6 +16,7 @@ public class Book implements IBook {
         this.author = author;
         this.genre = genre;
         this.year = year;
+        this.status = false;
     }
 
     public String getTitle() {
@@ -48,7 +49,7 @@ public class Book implements IBook {
 
     @Override
     public void display(){
-
+        System.out.println(title);
     }
 }
 

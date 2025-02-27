@@ -29,6 +29,9 @@ public class UIController extends Application implements IUIController
     private ObservableList<IBook> bookList = FXCollections.observableArrayList();
     private ObservableList<IUser> userList = FXCollections.observableArrayList();
     private ObservableList<ILoan> loanList = FXCollections.observableArrayList();
+    private IBookController bookController = Core.getInstance().getBookController();
+    private IUserController userController = Core.getInstance().getUserController();
+    private ILoanController loanController = Core.getInstance().getLoanController();
 
     public UIController() {
     }
@@ -48,9 +51,9 @@ public class UIController extends Application implements IUIController
         menuBar = new MenuBar();
         
         menuBar.getMenus().add(new Menu("Livro"));
-        MenuItem menuItem = createMenuItem("Livro", "Cadastro");
+        MenuItem menuItem = createMenuItem("Livro", "Cadastrar Livro");
         menuBar.getMenus().get(0).getItems().add(menuItem);
-        MenuItem menuItem2 = createMenuItem("Usuário", "Cadastro");
+        MenuItem menuItem2 = createMenuItem("Usuário", "Cadastrar Usuário");
         menuBar.getMenus().get(0).getItems().add(menuItem2);
         MenuItem menuItem3 = createMenuItem("Empréstimo", "Fazer empréstimo");
         menuBar.getMenus().get(0).getItems().add(menuItem3);
@@ -136,10 +139,8 @@ public class UIController extends Application implements IUIController
             String genre = genreField.getText();
             String year = yearField.getText();
         
-            var bookController = Core.getInstance().getBookController();
             if (bookController.requestCreateBook(title, ISBN, author, genre, year)) {
                 IBook book = bookController.createBook(title, ISBN, author, genre, year);
-                bookController.isLoan(book);
                 bookList.add(book);  // Atualiza a ObservableList
                 tableBook.refresh();  // Atualiza a exibição da tabela
                 titleField.clear();
@@ -147,6 +148,7 @@ public class UIController extends Application implements IUIController
                 authorField.clear();
                 genreField.clear();
                 yearField.clear();
+                //bookController.teste(book);
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao adicionar livro!", ButtonType.OK);
                 alert.showAndWait();
@@ -201,7 +203,6 @@ public class UIController extends Application implements IUIController
             String email = emailField.getText();
             String password = passwordField.getText();
         
-            var userController = Core.getInstance().getUserController();
             if (userController.requestCreateUser(name, email, password)) {
                 IUser user = userController.createUser(name, email, password);
                 userList.add(user);  // Atualiza a ObservableList
@@ -239,29 +240,16 @@ public class UIController extends Application implements IUIController
 
     public void openLoanTab() {
         Stage stage = new Stage();
-        stage.setTitle("Gerenciar Empréstimos");
+        stage.setTitle("Gerar Empréstimo");
 
         ComboBox<IUser> userComboBox = new ComboBox<>(userList);
         userComboBox.setPromptText("Selecione um Usuário");
-        /*userComboBox.setConverter(new StringConverter<IUser>(){
-            @Override
-            public String toString(IUser user) {
-                return user != null ? user.getNome() : "";
-            }
-
-            @Override
-            public IUser fromString(String string) {
-                return null;
-            }
-        });*/
 
         ComboBox<IBook> bookComboBox = new ComboBox<>(bookList);
         bookComboBox.setPromptText("Selecione um Livro");
         
         DatePicker datePicker = new DatePicker(LocalDate.now());
         
-        var userController = Core.getInstance().getUserController();
-        var loanController = Core.getInstance().getLoanController();
         Button saveButton = new Button("Realizar Empréstimo");
         saveButton.setOnAction(e -> {
             IUser user = userComboBox.getValue();
@@ -274,33 +262,39 @@ public class UIController extends Application implements IUIController
                 return;
             }
             
-            ILoan loan = loanController.setLoan(user, book, dateLoan, loanController.setDateReturn());
+            ILoan loan = loanController.setLoan(user, book, dateLoan);
             userController.getListBooks(user).add(book);
+            bookController.isLoan(book);
+            //loanController.getDate(loan);
             loanList.add(loan);
-            tableLoan.refresh();
             tableLoan.setItems(loanList);
+            tableLoan.refresh();
+            if(loan == null){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Erro no registro!!!", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
             Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
             success.showAndWait();
         });
         
-        tableLoan = new TableView<>();
+        tableLoan = new TableView<>(loanList);
         TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
-        userCol.setCellValueFactory(new PropertyValueFactory<>("user"));
+        userCol.setCellValueFactory(data -> data.getValue().userProperty());
         
         TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
-        bookCol.setCellValueFactory(new PropertyValueFactory<>("book"));
+        bookCol.setCellValueFactory(data -> data.getValue().bookProperty());
         
         TableColumn<ILoan, String> dateCol = new TableColumn<>("Data");
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateLoan"));
+        dateCol.setCellValueFactory(data -> data.getValue().dateLoanProperty());
         
         Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateCol);
-        
+
         VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
         Scene scene = new Scene(layout, 500, 400);
         stage.setScene(scene);
         stage.show();
     }
-
 
     public ObservableList<ILoan> getObListLoan(){
         return loanList;

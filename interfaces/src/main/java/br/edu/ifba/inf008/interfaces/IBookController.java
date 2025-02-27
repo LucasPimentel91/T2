@@ -14,5 +14,5 @@ public interface IBookController {
     public ArrayList<IBook> getBookList();
     public void addBook(IBook book);
     public void isLoan(IBook book);
-
+    public void teste(IBook book);
 }

@@ -3,17 +3,17 @@ package br.edu.ifba.inf008.shell;
 import java.time.LocalDate;
 
 import br.edu.ifba.inf008.interfaces.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Loan implements ILoan {
-    private int id;
     private IUser userInstance;
     private IBook bookInstance;
     private LocalDate loanDate;
-    private String returnDate;
+    private LocalDate returnDate;
     
     
-    public Loan(int id, IUser userInstance, IBook bookInstance, LocalDate loanDate, String returnDate) {
-        this.id = id;
+    public Loan(IUser userInstance, IBook bookInstance, LocalDate loanDate, LocalDate returnDate) {
         this.userInstance = userInstance;
         this.bookInstance = bookInstance;
         this.loanDate = loanDate;
@@ -30,6 +30,22 @@ public class Loan implements ILoan {
 
     public LocalDate getDateLoan(){
         return loanDate;
+    }
+    
+    public void teste(){
+        System.out.println(loanDate);
+    }
+
+    public StringProperty userProperty() {
+        return new SimpleStringProperty(userInstance.getName());
+    }
+
+    public StringProperty bookProperty() {
+        return new SimpleStringProperty(bookInstance.getTitle());
+    }
+
+    public StringProperty dateLoanProperty() {
+        return new SimpleStringProperty(loanDate.toString());
     }
 
 

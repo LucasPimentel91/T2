@@ -12,25 +12,18 @@ public class LoanController implements ILoanController {
         loanList = new ArrayList<ILoan>();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void updateId() {
-        id++;
-    }
-
     public boolean isValidUser(IUser user) {
         var userController = Core.getInstance().getUserController();
-        if(user != null && user instanceof User && userController.thisUserExists(user)) {
+        if(user != null && user instanceof IUser && userController.thisUserExists(user)) {
+            //O user não está sendo encontrado na lista de usuarios no userController.
             return true;
         }
-        return false;
+       return false;
     }
 
     public boolean isValidBook(IBook book) {
         var bookController = Core.getInstance().getBookController();
-        if(book != null && book instanceof Book && bookController.thisBookExists(book)) {
+        if(book != null && book instanceof IBook && bookController.thisBookExists(book)) {
             return true;
         }
         return false;
@@ -43,21 +36,19 @@ public class LoanController implements ILoanController {
         return false;
     }
 
-    public String setDateReturn() {
-        return LocalDate.now().plusDays(7).toString();
+    public LocalDate setDateReturn() {
+        return LocalDate.now().plusDays(7);
     }
 
-    public String setDateLoan() {
-        return LocalDate.now().toString();
-    }
 
-    public ILoan setLoan(IUser user, IBook book, LocalDate dateLoan, String dateReturn) {
+    public ILoan setLoan(IUser user, IBook book, LocalDate dateLoan) {
         if (requestSetLoan(user, book)) {
-            ILoan loan = new Loan(getId(), user, book, dateLoan, dateReturn);
+            var dateReturn = setDateReturn();
+            ILoan loan = new Loan(user, book, dateLoan, dateReturn);
             addLoan(loan);
-            updateId();
             return loan;
         }
+        //System.out.println("Aqui deu nada!!!");
         return null;
     }
 
@@ -69,5 +60,9 @@ public class LoanController implements ILoanController {
         if (loan != null) {
             loanList.add(loan);
         }
+    }
+
+    public void getDate(ILoan loan){
+        loan.teste();
     }
 }

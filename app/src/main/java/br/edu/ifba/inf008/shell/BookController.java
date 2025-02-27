@@ -62,4 +62,8 @@ public class BookController implements IBookController {
     public void isLoan(IBook book){
         book.isLoan();
     }
+
+    public void teste(IBook book){
+        book.display();
+    }
 }

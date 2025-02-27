@@ -7,9 +7,9 @@ public interface ILoanController {
     public boolean isValidUser(IUser user);
     public boolean isValidBook(IBook book);
     public boolean requestSetLoan(IUser user, IBook book);
-    public String setDateLoan();
-    public String setDateReturn();
-    public ILoan setLoan(IUser user, IBook book, LocalDate loanDate, String returnDate);
+    public LocalDate setDateReturn();
+    public ILoan setLoan(IUser user, IBook book, LocalDate loanDate);
     public ArrayList<ILoan> getLoanList(); 
     public void addLoan(ILoan loan);
+    public void getDate(ILoan loan);
 }
