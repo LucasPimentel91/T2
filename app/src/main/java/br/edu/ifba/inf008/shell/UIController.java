@@ -267,8 +267,8 @@ public class UIController extends Application implements IUIController
             bookController.isLoan(book);
             //loanController.getDate(loan);
             loanList.add(loan);
-            tableLoan.setItems(loanList);
-            tableLoan.refresh();
+            //tableLoan.setItems(loanList);
+            //tableLoan.refresh();
             if(loan == null){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Erro no registro!!!", ButtonType.OK);
                 alert.showAndWait();
@@ -277,7 +277,7 @@ public class UIController extends Application implements IUIController
             Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
             success.showAndWait();
         });
-        
+        /* 
         tableLoan = new TableView<>(loanList);
         TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
         userCol.setCellValueFactory(data -> data.getValue().userProperty());
@@ -285,12 +285,17 @@ public class UIController extends Application implements IUIController
         TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
         bookCol.setCellValueFactory(data -> data.getValue().bookProperty());
         
-        TableColumn<ILoan, String> dateCol = new TableColumn<>("Data");
-        dateCol.setCellValueFactory(data -> data.getValue().dateLoanProperty());
+        TableColumn<ILoan, String> dateLoanCol = new TableColumn<>("Data do Empréstimo");
+        dateLoanCol.setCellValueFactory(data -> data.getValue().dateLoanProperty());
         
-        Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateCol);
+        TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data do Retorno");
+        dateReturnCol.setCellValueFactory(data -> data.getValue().dateReturnProperty());
+        
+        Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
+        */
 
-        VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
+        VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton);
+        //VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
         Scene scene = new Scene(layout, 500, 400);
         stage.setScene(scene);
         stage.show();

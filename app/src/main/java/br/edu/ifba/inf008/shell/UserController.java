@@ -24,15 +24,17 @@ public class UserController implements IUserController {
 
     public boolean requestCreateUser(String name, String email, String password) {
         if (isValidName(name) && isValidEmail(email) && isValidPassword(password)) {
-            IUser user = createUser(name, email, password);
-            addUser(user);
+            //IUser user = createUser(name, email, password);
+            //addUser(user);
             return true;
         }
         return false;
     }
 
     public IUser createUser(String name, String email, String password) {
-        return new User(name, email, password);
+        IUser user = new User(name, email, password);
+        addUser(user);
+        return user;
     }
 
     public ArrayList<IUser> getUserList() {

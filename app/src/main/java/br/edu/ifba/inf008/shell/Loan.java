@@ -31,10 +31,12 @@ public class Loan implements ILoan {
     public LocalDate getDateLoan(){
         return loanDate;
     }
-    
-    public void teste(){
-        System.out.println(loanDate);
+
+    public LocalDate getDateReturn(){
+        return returnDate;
     }
+    
+    //public void teste(){ System.out.println(loanDate);}
 
     public StringProperty userProperty() {
         return new SimpleStringProperty(userInstance.getName());
@@ -46,6 +48,10 @@ public class Loan implements ILoan {
 
     public StringProperty dateLoanProperty() {
         return new SimpleStringProperty(loanDate.toString());
+    }
+
+    public StringProperty dateReturnProperty() {
+        return new SimpleStringProperty(returnDate.toString());
     }
 
 

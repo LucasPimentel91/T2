@@ -1,6 +1,9 @@
 package br.edu.ifba.inf008.plugins;
 
 import br.edu.ifba.inf008.interfaces.IPlugin;
+
+import java.util.Collections;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.ILoan;
@@ -41,10 +44,13 @@ public class ReportPlugin implements IPlugin {
         TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
         bookCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBook().toString()));
 
-        TableColumn<ILoan, String> dateCol = new TableColumn<>("Data");
-        dateCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateLoan().toString()));
+        TableColumn<ILoan, String> dateLoanCol = new TableColumn<>("Data do Empréstimo");
+        dateLoanCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateLoan().toString()));
+        
+        TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data de Retorno");
+        dateReturnCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateReturn().toString()));
 
-        reportTable.getColumns().addAll(userCol, bookCol, dateCol);
+        Collections.addAll(reportTable.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
 
         VBox layout = new VBox(10, reportTable);
         Scene scene = new Scene(layout, 500, 400);

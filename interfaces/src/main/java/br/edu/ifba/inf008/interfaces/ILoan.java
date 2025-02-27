@@ -8,9 +8,11 @@ public interface ILoan {
     public IUser getUser();
     public IBook getBook();
     public LocalDate getDateLoan();
-    public void teste();
+    public LocalDate getDateReturn();
+    //public void teste();
     public StringProperty userProperty();
     public StringProperty bookProperty();
     public StringProperty dateLoanProperty();
+    public StringProperty dateReturnProperty();
 
 }
