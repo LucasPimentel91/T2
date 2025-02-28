@@ -2,6 +2,8 @@ package br.edu.ifba.inf008.shell;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import br.edu.ifba.inf008.interfaces.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +19,9 @@ public class IOController implements IIOController, Serializable {
     private transient ObservableList<IBook> bookListObs = FXCollections.observableArrayList();
     private transient ObservableList<IUser> userListObs = FXCollections.observableArrayList();
     private transient ObservableList<ILoan> loanListObs = FXCollections.observableArrayList();
+    private transient ObservableList<ILoan> loanLateListObs = FXCollections.observableArrayList(
+        loanListObs.stream().filter(loan -> loan.getStatus() == 1).collect(Collectors.toList())
+    );
 
     public IOController() {
         loadData();
@@ -45,6 +50,9 @@ public class IOController implements IIOController, Serializable {
 
     public ObservableList<ILoan> getLoanListObs() {
         return loanListObs;
+    }
+    public ObservableList<ILoan> getLoanLateListObs() {
+        return loanLateListObs;
     }
 
     public void addBook(IBook book) {

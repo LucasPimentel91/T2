@@ -39,6 +39,10 @@ public class Loan implements ILoan, Serializable {
         return returnDate;
     }
 
+    public int getStatus(){
+        return status;
+    }
+
     public void setDateDelivery(LocalDate date){
         this.deliveryDate = date;
     }

@@ -12,6 +12,7 @@ public interface IIOController
     public ObservableList<IBook> getBookListObs();
     public ObservableList<IUser> getUserListObs();
     public ObservableList<ILoan> getLoanListObs();
+    public ObservableList<ILoan> getLoanLateListObs();
     public void addBook(IBook book);
     public void addUser(IUser user);
     public void addLoan(ILoan loan);

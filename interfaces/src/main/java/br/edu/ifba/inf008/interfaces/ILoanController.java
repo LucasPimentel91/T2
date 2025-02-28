@@ -9,6 +9,7 @@ public interface ILoanController {
     public boolean requestSetLoan(IUser user, IBook book);
     public LocalDate setDateReturn();
     public ILoan setLoan(IUser user, IBook book, LocalDate loanDate);
+    public void updateStatusLate(LocalDate date);
     /* 
     public ArrayList<ILoan> getLoanList(); 
     public void addLoan(ILoan loan);

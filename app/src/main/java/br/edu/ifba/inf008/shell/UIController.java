@@ -26,6 +26,7 @@ public class UIController extends Application implements IUIController
     private TableView<IBook> tableBook;
     private TableView<IUser> tableUser;
     private TableView<ILoan> tableLoan;
+    private TableView<ILoan> tableLoanLate;
     /* 
     private ObservableList<IBook> bookList = FXCollections.observableArrayList();
     private ObservableList<IUser> userList = FXCollections.observableArrayList();
@@ -306,5 +307,6 @@ public class UIController extends Application implements IUIController
         stage.setScene(scene);
         stage.show();
     }
+
 }
 
