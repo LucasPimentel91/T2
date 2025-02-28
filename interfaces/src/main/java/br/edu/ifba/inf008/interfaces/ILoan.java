@@ -9,7 +9,7 @@ public interface ILoan {
     public IBook getBook();
     public LocalDate getDateLoan();
     public LocalDate getDateReturn(); 
-    public int getStatus()
+    public int getStatus();
     public void setDateDelivery(LocalDate date);
     public void returned();
     public void late();

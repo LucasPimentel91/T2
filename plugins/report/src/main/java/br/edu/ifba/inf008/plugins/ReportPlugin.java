@@ -77,7 +77,7 @@ public class ReportPlugin implements IPlugin {
             Stage stage2 = new Stage();
             stage2.setTitle("Relatório de Empréstimos Atrasados");
 
-            TableView<ILoan> reportLateTable = new TableView<>(ioController.getLoanLateListObs);
+            TableView<ILoan> reportLateTable = new TableView<>(ioController.getLoanLateListObs());
         
             TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
             userCol.setCellValueFactory(data -> data.getValue().userProperty());
@@ -93,32 +93,10 @@ public class ReportPlugin implements IPlugin {
 
             Collections.addAll(reportLateTable.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
 
-            VBox layout = new VBox(10, reportLateTable);
+            VBox layout = new VBox(10, datePicker, saveButton, reportLateTable);
             Scene scene = new Scene(layout, 600, 400);
             stage.setScene(scene);
             stage.show();
         });
-        /* 
-        tableLoan = new TableView<>(loanList);
-        TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
-        userCol.setCellValueFactory(data -> data.getValue().userProperty());
-        
-        TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
-        bookCol.setCellValueFactory(data -> data.getValue().bookProperty());
-        
-        TableColumn<ILoan, String> dateLoanCol = new TableColumn<>("Data do Empréstimo");
-        dateLoanCol.setCellValueFactory(data -> data.getValue().dateLoanProperty());
-        
-        TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data do Retorno");
-        dateReturnCol.setCellValueFactory(data -> data.getValue().dateReturnProperty());
-        
-        Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
-        */
-
-        VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton);
-        //VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
-        Scene scene = new Scene(layout, 500, 400);
-        stage.setScene(scene);
-        stage.show();
     }
 }
