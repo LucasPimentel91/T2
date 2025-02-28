@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class LoanController implements ILoanController {
-    private IIOController ioController = Core.getInstance().getIOController();
+    //private IIOController ioController;
     //private ArrayList<ILoan> loanList;
     //private int id = 1;
 
@@ -49,11 +49,12 @@ public class LoanController implements ILoanController {
             //addLoan(loan);
             return loan;
         }
-        //System.out.println("Aqui deu nada!!!");
+        //System.out.println("Aqui deu nada!!!");var ioController = Core.getInstance().getIOController();
         return null;
     }
 
     public void updateStatusLate(LocalDate date) {
+        var ioController = Core.getInstance().getIOController();
         for (ILoan loan : ioController.getListLoan()) {
             if (date.isAfter(loan.getDateReturn())) { 
                 loan.late();

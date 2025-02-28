@@ -2,6 +2,7 @@ package br.edu.ifba.inf008.plugins;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import br.edu.ifba.inf008.interfaces.*;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -66,18 +68,26 @@ public class ReportPlugin implements IPlugin {
         stage.setTitle("Informar data atual");
         
         DatePicker datePicker = new DatePicker(LocalDate.now());
+        Button saveButton = new Button("Gerar Relatório");
         
-        Button saveButton = new Button("Realizar Empréstimo");
         saveButton.setOnAction(e -> {
-            
             LocalDate dateCurrent = datePicker.getValue();
             
+            // Atualiza o status dos empréstimos
             loanController.updateStatusLate(dateCurrent);
-
+            
+            // Garante que a lista está atualizada
+            ObservableList<ILoan> loanLateListObs = FXCollections.observableArrayList(
+                ioController.getLoanListObs().stream()
+                    .filter(loan -> loan.getStatus() == 0) // 0 representa "atrasado"
+                    .collect(Collectors.toList())
+            );
+    
+            // Criando a segunda tela (Relatório de Atrasados)
             Stage stage2 = new Stage();
             stage2.setTitle("Relatório de Empréstimos Atrasados");
-
-            TableView<ILoan> reportLateTable = new TableView<>(ioController.getLoanLateListObs());
+    
+            TableView<ILoan> reportLateTable = new TableView<>(loanLateListObs);
         
             TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
             userCol.setCellValueFactory(data -> data.getValue().userProperty());
@@ -90,13 +100,21 @@ public class ReportPlugin implements IPlugin {
             
             TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data de Retorno");
             dateReturnCol.setCellValueFactory(data -> data.getValue().dateReturnProperty());
-
+    
             Collections.addAll(reportLateTable.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
-
-            VBox layout = new VBox(10, datePicker, saveButton, reportLateTable);
-            Scene scene = new Scene(layout, 600, 400);
-            stage.setScene(scene);
-            stage.show();
+    
+            VBox layout2 = new VBox(10, reportLateTable);
+            Scene scene2 = new Scene(layout2, 600, 400);
+            stage2.setScene(scene2);
+            stage2.show();
         });
+    
+        // Layout da primeira tela
+        VBox layout1 = new VBox(10, datePicker, saveButton);
+        Scene scene1 = new Scene(layout1, 300, 150);
+        stage.setScene(scene1);
+        stage.show();
     }
+    
+
 }
