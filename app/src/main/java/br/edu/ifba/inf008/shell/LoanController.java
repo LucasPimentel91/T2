@@ -5,16 +5,15 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class LoanController implements ILoanController {
-    private ArrayList<ILoan> loanList;
-    private int id = 1;
+    //private ArrayList<ILoan> loanList;
+    //private int id = 1;
 
-    public LoanController() {
-        loanList = new ArrayList<ILoan>();
-    }
+    //public LoanController() {   loanList = new ArrayList<ILoan>(); }
 
     public boolean isValidUser(IUser user) {
+        var ioController = Core.getInstance().getIOController();
         var userController = Core.getInstance().getUserController();
-        if(user != null && user instanceof IUser && userController.thisUserExists(user)) {
+        if(user != null && user instanceof IUser && userController.thisUserExists(ioController, user)) {
             //O user não está sendo encontrado na lista de usuarios no userController.
             return true;
         }
@@ -22,8 +21,9 @@ public class LoanController implements ILoanController {
     }
 
     public boolean isValidBook(IBook book) {
+        var ioController = Core.getInstance().getIOController();
         var bookController = Core.getInstance().getBookController();
-        if(book != null && book instanceof IBook && bookController.thisBookExists(book)) {
+        if(book != null && book instanceof IBook && bookController.thisBookExists(ioController, book)) {
             return true;
         }
         return false;
@@ -45,13 +45,13 @@ public class LoanController implements ILoanController {
         if (requestSetLoan(user, book)) {
             var dateReturn = setDateReturn();
             ILoan loan = new Loan(user, book, dateLoan, dateReturn);
-            addLoan(loan);
+            //addLoan(loan);
             return loan;
         }
         //System.out.println("Aqui deu nada!!!");
         return null;
     }
-
+    /* 
     public ArrayList<ILoan> getLoanList() {
         return loanList;
     }
@@ -60,9 +60,6 @@ public class LoanController implements ILoanController {
         if (loan != null) {
             loanList.add(loan);
         }
-    }
+    }*/
 
-    public void getDate(ILoan loan){
-        loan.teste();
-    }
 }

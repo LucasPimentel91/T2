@@ -1,8 +1,10 @@
 package br.edu.ifba.inf008.shell;
 
+import java.io.Serializable;
+
 import br.edu.ifba.inf008.interfaces.IBook;
 
-public class Book implements IBook {
+public class Book implements IBook, Serializable {
     private String title;
     private String ISBN;
     private String author;

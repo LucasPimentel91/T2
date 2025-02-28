@@ -1,20 +1,20 @@
 package br.edu.ifba.inf008.shell;
 
 import br.edu.ifba.inf008.interfaces.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BookController implements IBookController {
-    private ArrayList<IBook> bookList;
+    //private ArrayList<IBook> bookList;
 
-    public BookController() {
-        this.bookList = new ArrayList<>(); // Inicializa a lista para evitar NullPointerException
-    }
+    //public BookController() { this.bookList = new ArrayList<IBook>(); }
 
     @Override
     public IBook createBook(String title, String author, String ISBN, String genre, String year) {
         if (requestCreateBook(title, author, ISBN, genre, year)) {
             IBook book = new Book(title, author, ISBN, genre, year);
-            addBook(book);
+            //addBook(book);
             return book;
         }
         return null;
@@ -45,18 +45,17 @@ public class BookController implements IBookController {
                isValidGenre(genre) && isValidPublicationYear(year);
     }
 
-    public ArrayList<IBook> getBookList() {
-        return bookList;
-    }
+    //public ArrayList<IBook> getBookList() {return bookList;}
 
+    /* 
     public void addBook(IBook book) {
         if (book != null) {
             bookList.add(book);
         }
-    }
+    }*/
 
-    public boolean thisBookExists(IBook book) {
-        return bookList.contains(book);
+    public boolean thisBookExists(IIOController ioController, IBook book) {
+        return ioController.getListBook().contains(book);
     }
 
     public void isLoan(IBook book){

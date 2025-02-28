@@ -1,9 +1,11 @@
 package br.edu.ifba.inf008.shell;
 
 import br.edu.ifba.inf008.interfaces.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements IUser {
+public class User implements IUser, Serializable {
     private String name;
     private String email;
     private String password;

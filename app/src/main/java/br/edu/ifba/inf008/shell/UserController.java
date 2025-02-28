@@ -4,11 +4,9 @@ import br.edu.ifba.inf008.interfaces.*;
 import java.util.*;
 
 public class UserController implements IUserController {
-    private ArrayList<IUser> userList;
+    //private ArrayList<IUser> userList;
 
-    public UserController() {
-        this.userList = new ArrayList<IUser>();
-    }
+    //public UserController() { this.userList = new ArrayList<IUser>();}
 
     public boolean isValidName(String name) {
         return name != null && !name.isEmpty();
@@ -33,10 +31,10 @@ public class UserController implements IUserController {
 
     public IUser createUser(String name, String email, String password) {
         IUser user = new User(name, email, password);
-        addUser(user);
+        //addUser(user);
         return user;
     }
-
+/* 
     public ArrayList<IUser> getUserList() {
         return userList;
     }
@@ -44,9 +42,9 @@ public class UserController implements IUserController {
     public void addUser(IUser user) {
         userList.add(user);
     }
-
-    public boolean thisUserExists(IUser user) {
-        return userList.contains(user);
+*/
+    public boolean thisUserExists(IIOController ioController, IUser user) {
+        return ioController.getListUser().contains(user);
     }
 
     public ArrayList<IBook> getListBooks(IUser user){

@@ -26,12 +26,15 @@ public class UIController extends Application implements IUIController
     private TableView<IBook> tableBook;
     private TableView<IUser> tableUser;
     private TableView<ILoan> tableLoan;
+    /* 
     private ObservableList<IBook> bookList = FXCollections.observableArrayList();
     private ObservableList<IUser> userList = FXCollections.observableArrayList();
     private ObservableList<ILoan> loanList = FXCollections.observableArrayList();
+    */
     private IBookController bookController = Core.getInstance().getBookController();
     private IUserController userController = Core.getInstance().getUserController();
     private ILoanController loanController = Core.getInstance().getLoanController();
+    private IIOController ioController = Core.getInstance().getIOController();
 
     public UIController() {
     }
@@ -141,7 +144,8 @@ public class UIController extends Application implements IUIController
         
             if (bookController.requestCreateBook(title, ISBN, author, genre, year)) {
                 IBook book = bookController.createBook(title, ISBN, author, genre, year);
-                bookList.add(book);  // Atualiza a ObservableList
+                //bookList.add(book);
+                ioController.addBook(book);  // Atualiza a ObservableList
                 tableBook.refresh();  // Atualiza a exibição da tabela
                 titleField.clear();
                 isbnField.clear();
@@ -156,7 +160,7 @@ public class UIController extends Application implements IUIController
         });
 
         // Criando a Tabela
-        tableBook = new TableView<>(bookList); // Inicializa com a lista
+        tableBook = new TableView<>(ioController.getBookListObs()); // Inicializa com a lista
 
         TableColumn<IBook, String> titleCol = new TableColumn<>("Título");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -174,7 +178,7 @@ public class UIController extends Application implements IUIController
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
 
         Collections.addAll(tableBook.getColumns(), titleCol, isbnCol, authorCol, genreCol, yearCol);
-        tableBook.setItems(bookList);
+        tableBook.setItems(ioController.getBookListObs());
 
 
         // Criar o layout da aba
@@ -205,7 +209,8 @@ public class UIController extends Application implements IUIController
         
             if (userController.requestCreateUser(name, email, password)) {
                 IUser user = userController.createUser(name, email, password);
-                userList.add(user);  // Atualiza a ObservableList
+                //userList.add(user);  // Atualiza a ObservableList
+                ioController.addUser(user);
                 tableUser.refresh();  // Atualiza a exibição da tabela
                 nameField.clear();
                 emailField.clear();
@@ -217,7 +222,7 @@ public class UIController extends Application implements IUIController
         });
 
         // Criando a Tabela
-        tableUser = new TableView<>(userList); // Inicializa com a lista
+        tableUser = new TableView<>(ioController.getUserListObs()); // Inicializa com a lista
 
         TableColumn<IUser, String> nameCol = new TableColumn<>("Nome");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -227,7 +232,7 @@ public class UIController extends Application implements IUIController
 
 
         Collections.addAll(tableUser.getColumns(), nameCol, emailCol);
-        tableUser.setItems(userList);
+        tableUser.setItems(ioController.getUserListObs());
 
 
         // Criar o layout da aba
@@ -242,10 +247,10 @@ public class UIController extends Application implements IUIController
         Stage stage = new Stage();
         stage.setTitle("Gerar Empréstimo");
 
-        ComboBox<IUser> userComboBox = new ComboBox<>(userList);
+        ComboBox<IUser> userComboBox = new ComboBox<>(ioController.getUserListObs());
         userComboBox.setPromptText("Selecione um Usuário");
 
-        ComboBox<IBook> bookComboBox = new ComboBox<>(bookList);
+        ComboBox<IBook> bookComboBox = new ComboBox<>(ioController.getBookListObs());
         bookComboBox.setPromptText("Selecione um Livro");
         
         DatePicker datePicker = new DatePicker(LocalDate.now());
@@ -266,7 +271,8 @@ public class UIController extends Application implements IUIController
             userController.getListBooks(user).add(book);
             bookController.isLoan(book);
             //loanController.getDate(loan);
-            loanList.add(loan);
+            //loanList.add(loan);
+            ioController.addLoan(loan);
             //tableLoan.setItems(loanList);
             //tableLoan.refresh();
             if(loan == null){
@@ -299,10 +305,6 @@ public class UIController extends Application implements IUIController
         Scene scene = new Scene(layout, 500, 400);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public ObservableList<ILoan> getObListLoan(){
-        return loanList;
     }
 }
 

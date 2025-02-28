@@ -11,6 +11,5 @@ public interface IUIController
     public void openBookTab();
     public void openUserTab();
     public void openLoanTab();
-    public ObservableList<ILoan> getObListLoan();
 
 }

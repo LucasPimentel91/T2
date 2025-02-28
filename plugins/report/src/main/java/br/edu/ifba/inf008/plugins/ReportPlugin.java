@@ -4,9 +4,7 @@ import br.edu.ifba.inf008.interfaces.IPlugin;
 
 import java.util.Collections;
 
-import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IUIController;
-import br.edu.ifba.inf008.interfaces.ILoan;
+import br.edu.ifba.inf008.interfaces.*;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -22,17 +20,18 @@ public class ReportPlugin implements IPlugin {
     @Override
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
+        IIOController ioController = ICore.getInstance().getIOController();
 
         MenuItem menuItem = uiController.createMenuItem("Relatório", "Emprestados");
         menuItem.setOnAction(e -> { 
-            showReportLoans(uiController);
+            showReportLoans(uiController, ioController);
     });
 
         return true;
     }
 
-    private void showReportLoans(IUIController uiController) {
-        ObservableList<ILoan> loanList = uiController.getObListLoan();
+    private void showReportLoans(IUIController uiController, IIOController ioController) {
+        ObservableList<ILoan> loanList = ioController.getLoanListObs();
         Stage reportStage = new Stage();
         reportStage.setTitle("Relatório de Empréstimos");
 

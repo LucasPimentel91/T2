@@ -1,8 +1,26 @@
 package br.edu.ifba.inf008.interfaces;
 
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
+
 public interface IIOController
 {   
-    public void fileSerializationCreate();
-    public void read();
-    public void write();
+    public ArrayList<IUser> getListUser();
+    public ArrayList<IBook> getListBook();
+    public ArrayList<ILoan> getListLoan();
+    public ObservableList<IBook> getBookListObs();
+    public ObservableList<IUser> getUserListObs();
+    public ObservableList<ILoan> getLoanListObs();
+    public void addBook(IBook book);
+    public void addUser(IUser user);
+    public void addLoan(ILoan loan);
+    public void saveData();
+    public void loadData();
+    //private void updateObservableLists();
+    /* 
+    public ObservableList<IBook> setBookListObs();
+    public ObservableList<IUser> setUserListObs();
+    public ObservableList<ILoan> setLoanListObs();*/
+    
 }
