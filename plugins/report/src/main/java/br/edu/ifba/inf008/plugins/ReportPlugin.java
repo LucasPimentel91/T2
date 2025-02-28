@@ -27,7 +27,10 @@ public class ReportPlugin implements IPlugin {
         menuItem.setOnAction(e -> { 
             showReportLoans(uiController, ioController);
     });
-
+        MenuItem menuItem2 = uiController.createMenuItem("Relatório", "Atrasados");
+        menuItem2.setOnAction(e -> { 
+            showReportLoansLate(ioController, loanController);
+    });
         return true;
     }
 
@@ -58,7 +61,7 @@ public class ReportPlugin implements IPlugin {
         reportStage.show();
     }
 
-    private void openLoanTab(IIOController ioController, ILoanController loanController) {
+    private void showReportLoansLate(IIOController ioController, ILoanController loanController) {
         Stage stage = new Stage();
         stage.setTitle("Informar data atual");
         
