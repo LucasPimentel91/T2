@@ -49,6 +49,10 @@ public class Book implements IBook, Serializable {
         status = false;
     }
 
+    public String toString(){
+        return getTitle();
+    }
+
     @Override
     public void display(){
         System.out.println(title);

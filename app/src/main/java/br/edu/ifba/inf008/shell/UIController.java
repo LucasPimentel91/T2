@@ -25,13 +25,6 @@ public class UIController extends Application implements IUIController
     private static UIController uiController;
     private TableView<IBook> tableBook;
     private TableView<IUser> tableUser;
-    private TableView<ILoan> tableLoan;
-    private TableView<ILoan> tableLoanLate;
-    /* 
-    private ObservableList<IBook> bookList = FXCollections.observableArrayList();
-    private ObservableList<IUser> userList = FXCollections.observableArrayList();
-    private ObservableList<ILoan> loanList = FXCollections.observableArrayList();
-    */
     private IBookController bookController = Core.getInstance().getBookController();
     private IUserController userController = Core.getInstance().getUserController();
     private ILoanController loanController = Core.getInstance().getLoanController();
@@ -247,65 +240,67 @@ public class UIController extends Application implements IUIController
     public void openLoanTab() {
         Stage stage = new Stage();
         stage.setTitle("Gerar Empréstimo");
-
+    
         ComboBox<IUser> userComboBox = new ComboBox<>(ioController.getUserListObs());
         userComboBox.setPromptText("Selecione um Usuário");
-
-        ComboBox<IBook> bookComboBox = new ComboBox<>(ioController.getBookListObs());
-        bookComboBox.setPromptText("Selecione um Livro");
         
+        //Proibir emprestimo de livro já emprestado. Pois todos são únicos.
+        ListView<IBook> bookListView = new ListView<>(ioController.getBookListObs());
+        bookListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // Permite múltipla seleção
+        bookListView.setPrefHeight(150); // Ajuste de tamanho para melhor visualização
+    
         DatePicker datePicker = new DatePicker(LocalDate.now());
-        
+    
         Button saveButton = new Button("Realizar Empréstimo");
         saveButton.setOnAction(e -> {
             IUser user = userComboBox.getValue();
-            IBook book = bookComboBox.getValue();
+            ObservableList<IBook> selectedBooks = bookListView.getSelectionModel().getSelectedItems();
             LocalDate dateLoan = datePicker.getValue();
-            
-            if (user == null || book == null || dateLoan == null) {
+    
+            if (user == null || selectedBooks.isEmpty() || dateLoan == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Preencha todos os campos", ButtonType.OK);
                 alert.showAndWait();
                 return;
-            }
-            
-            ILoan loan = loanController.setLoan(user, book, dateLoan);
-            userController.getListBooks(user).add(book);
-            bookController.isLoan(book);
-            //loanController.getDate(loan);
-            //loanList.add(loan);
-            ioController.addLoan(loan);
-            //tableLoan.setItems(loanList);
-            //tableLoan.refresh();
-            if(loan == null){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Erro no registro!!!", ButtonType.OK);
+            }else if(selectedBooks.size() > 5){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Só é permitido até cinco livros por empréstimo", ButtonType.OK);
                 alert.showAndWait();
                 return;
             }
-            Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo registrado com sucesso!", ButtonType.OK);
+    
+            for (IBook book : selectedBooks) {
+                ILoan loan = loanController.setLoan(user, book, dateLoan);
+                if (loan == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Erro no registro de empréstimo para o livro: " + book.getTitle(), ButtonType.OK);
+                    alert.showAndWait();
+                    continue; // Pula para o próximo livro se houver erro
+                }
+    
+                userController.getListBooks(user).add(book);
+                bookController.isLoan(book);
+                ioController.addLoan(loan);
+            }
+    
+            Alert success = new Alert(Alert.AlertType.INFORMATION, "Empréstimo(s) registrado(s) com sucesso!", ButtonType.OK);
             success.showAndWait();
         });
-        /* 
-        tableLoan = new TableView<>(loanList);
-        TableColumn<ILoan, String> userCol = new TableColumn<>("Usuário");
-        userCol.setCellValueFactory(data -> data.getValue().userProperty());
-        
-        TableColumn<ILoan, String> bookCol = new TableColumn<>("Livro");
-        bookCol.setCellValueFactory(data -> data.getValue().bookProperty());
-        
-        TableColumn<ILoan, String> dateLoanCol = new TableColumn<>("Data do Empréstimo");
-        dateLoanCol.setCellValueFactory(data -> data.getValue().dateLoanProperty());
-        
-        TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data do Retorno");
-        dateReturnCol.setCellValueFactory(data -> data.getValue().dateReturnProperty());
-        
-        Collections.addAll(tableLoan.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
-        */
-
-        VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton);
-        //VBox layout = new VBox(10, userComboBox, bookComboBox, datePicker, saveButton, tableLoan);
-        Scene scene = new Scene(layout, 500, 400);
+    
+        VBox layout = new VBox(10, userComboBox, bookListView, datePicker, saveButton);
+        Scene scene = new Scene(layout, 500, 450);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void openLoanReturnTab() {
+        //implementar tela de devolução
+
+        /*
+         Perguntar email do usuário;
+         Carregar a lista de livros que tem esse usuario vinculado;
+         Botão: Devolver esses livros?
+         Yes - Retirar livros da lista pessoal do usuário, trocar stutus de emprestado dos livros, e adicionar uma coluna de data de entrega no livro no loan.
+            se atrasado (data atual > data de retorno), gerar cálculo de multa e mostrar na tela.
+        obs: tem que impactar nos relatórios de empréstimo e atrasado.
+         */
     }
 
 }
