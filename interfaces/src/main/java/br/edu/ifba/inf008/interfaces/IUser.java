@@ -7,5 +7,7 @@ public interface IUser {
     public String getEmail();
     public String getPassword();
     public String toString();
+    public String generateUserId();
+    public String getID();
     public ArrayList<IBook> myListBooks();
 }
