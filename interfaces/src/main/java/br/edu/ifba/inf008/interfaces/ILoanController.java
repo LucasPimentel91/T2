@@ -11,8 +11,4 @@ public interface ILoanController {
     public ILoan setLoan(IUser user, IBook book, LocalDate loanDate);
     public void updateStatusLate(LocalDate date);
     public ILoan findLoanByBook(IBook book);
-    /* 
-    public ArrayList<ILoan> getLoanList(); 
-    public void addLoan(ILoan loan);
-    */
 }

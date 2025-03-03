@@ -91,10 +91,10 @@ public class IOController implements IIOController, Serializable {
 
     public void updateLoan(ILoan loan) {
         for (int i = 0; i < loanList.size(); i++) {
-            if (loanList.get(i).getID().equals(loan.getID())) { // Supondo que cada empréstimo tenha um ID único
+            if (loanList.get(i).getID().equals(loan.getID())) { 
                 loanList.set(i, loan);
                 loanListObs.set(i, loan);
-                saveData(); // Salva os dados atualizados
+                saveData(); 
                 return;
             }
         }
@@ -105,7 +105,7 @@ public class IOController implements IIOController, Serializable {
     public void loadData() {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
-            return; // Se o arquivo não existe, não há nada para carregar
+            return; 
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {

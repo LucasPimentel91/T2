@@ -10,9 +10,5 @@ public interface IUserController {
     public IUser createUser(String name, String email, String password); 
     public boolean thisUserExists(IIOController iioController, IUser user);
     public IUser findUserByEmail(String email);
-    /* 
-    public ArrayList<IUser> getUserList();
-    public void addUser(IUser user);
-    */
     public ArrayList<IBook> getListBooks(IUser user);
 }

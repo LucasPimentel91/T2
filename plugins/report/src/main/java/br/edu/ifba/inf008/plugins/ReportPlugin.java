@@ -80,17 +80,14 @@ public class ReportPlugin implements IPlugin {
         saveButton.setOnAction(e -> {
             LocalDate dateCurrent = datePicker.getValue();
             
-            // Atualiza o status dos empréstimos
             loanController.updateStatusLate(dateCurrent);
             
-            // Garante que a lista está atualizada
             ObservableList<ILoan> loanLateListObs = FXCollections.observableArrayList(
                 ioController.getLoanListObs().stream()
-                    .filter(loan -> loan.getStatus() == 1 && loan.getDateDelivery() == null) // 0 representa "atrasado"
+                    .filter(loan -> loan.getStatus() == 1 && loan.getDateDelivery() == null) 
                     .collect(Collectors.toList())
             );
     
-            // Criando a segunda tela (Relatório de Atrasados)
             Stage stage2 = new Stage();
             stage2.setTitle("Relatório de Empréstimos Atrasados");
     
@@ -116,7 +113,6 @@ public class ReportPlugin implements IPlugin {
             stage2.show();
         });
     
-        // Layout da primeira tela
         VBox layout1 = new VBox(10, datePicker, saveButton);
         Scene scene1 = new Scene(layout1, 300, 150);
         stage.setScene(scene1);

@@ -37,7 +37,7 @@ public class Book implements IBook, Serializable {
         return genre;
     }
 
-    public String getYear() {  // O erro estava aqui
+    public String getYear() {  
         return year;
     }
 

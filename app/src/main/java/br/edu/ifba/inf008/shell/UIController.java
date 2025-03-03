@@ -117,8 +117,6 @@ public class UIController extends Application implements IUIController
 
     public void openBookTab() {
         
-
-        // Criar campos de entrada
         TextField titleField = new TextField();
         titleField.setPromptText("Título");
 
@@ -134,7 +132,6 @@ public class UIController extends Application implements IUIController
         TextField yearField = new TextField();
         yearField.setPromptText("Ano de Publicação");
 
-        // Botão para salvar
         Button saveButton = new Button("Salvar");
         saveButton.setOnAction(e -> {
             String title = titleField.getText();
@@ -145,23 +142,20 @@ public class UIController extends Application implements IUIController
         
             if (bookController.requestCreateBook(title, ISBN, author, genre, year)) {
                 IBook book = bookController.createBook(title, ISBN, author, genre, year);
-                //bookList.add(book);
-                ioController.addBook(book);  // Atualiza a ObservableList
-                tableBook.refresh();  // Atualiza a exibição da tabela
+                ioController.addBook(book);  
+                tableBook.refresh();  
                 titleField.clear();
                 isbnField.clear();
                 authorField.clear();
                 genreField.clear();
                 yearField.clear();
-                //bookController.teste(book);
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao adicionar livro!", ButtonType.OK);
                 alert.showAndWait();
             }
         });
 
-        // Criando a Tabela
-        tableBook = new TableView<>(ioController.getBookListObs()); // Inicializa com a lista
+        tableBook = new TableView<>(ioController.getBookListObs());
 
         TableColumn<IBook, String> titleCol = new TableColumn<>("Título");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -181,12 +175,9 @@ public class UIController extends Application implements IUIController
         Collections.addAll(tableBook.getColumns(), titleCol, isbnCol, authorCol, genreCol, yearCol);
         tableBook.setItems(ioController.getBookListObs());
 
-
-        // Criar o layout da aba
         VBox layout = new VBox(10, titleField, isbnField, authorField, genreField, yearField, saveButton, tableBook);
         layout.setPadding(new javafx.geometry.Insets(10));
 
-        // Criar a aba no UIController
         createTab("Cadastro de Livros", layout);
     }
 
@@ -201,7 +192,6 @@ public class UIController extends Application implements IUIController
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Senha");
 
-        // Botão para salvar
         Button saveButton = new Button("Salvar");
         saveButton.setOnAction(e -> {
             String name = nameField.getText();
@@ -210,9 +200,8 @@ public class UIController extends Application implements IUIController
         
             if (userController.requestCreateUser(name, email, password)) {
                 IUser user = userController.createUser(name, email, password);
-                //userList.add(user);  // Atualiza a ObservableList
                 ioController.addUser(user);
-                tableUser.refresh();  // Atualiza a exibição da tabela
+                tableUser.refresh();  
                 nameField.clear();
                 emailField.clear();
                 passwordField.clear();
@@ -222,8 +211,7 @@ public class UIController extends Application implements IUIController
             }
         });
 
-        // Criando a Tabela
-        tableUser = new TableView<>(ioController.getUserListObs()); // Inicializa com a lista
+        tableUser = new TableView<>(ioController.getUserListObs()); 
 
         TableColumn<IUser, String> nameCol = new TableColumn<>("Nome");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -231,16 +219,12 @@ public class UIController extends Application implements IUIController
         TableColumn<IUser, String> emailCol = new TableColumn<>("Email");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-
         Collections.addAll(tableUser.getColumns(), nameCol, emailCol);
         tableUser.setItems(ioController.getUserListObs());
 
-
-        // Criar o layout da aba
         VBox layout = new VBox(10, nameField, emailField, passwordField,  saveButton, tableUser);
         layout.setPadding(new javafx.geometry.Insets(10));
 
-        // Criar a aba no UIController
         createTab("Cadastro de Usuários", layout);
     }
 
@@ -251,10 +235,9 @@ public class UIController extends Application implements IUIController
         ComboBox<IUser> userComboBox = new ComboBox<>(ioController.getUserListObs());
         userComboBox.setPromptText("Selecione um Usuário");
         
-        //Proibir emprestimo de livro já emprestado. Pois todos são únicos.
         ListView<IBook> bookListView = new ListView<>(ioController.getBookListObs());
-        bookListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // Permite múltipla seleção
-        bookListView.setPrefHeight(150); // Ajuste de tamanho para melhor visualização
+        bookListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); 
+        bookListView.setPrefHeight(150); 
     
         DatePicker datePicker = new DatePicker(LocalDate.now());
     
@@ -279,7 +262,7 @@ public class UIController extends Application implements IUIController
                 if (loan == null) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Erro no registro de empréstimo para o livro: " + book.getTitle(), ButtonType.OK);
                     alert.showAndWait();
-                    continue; // Pula para o próximo livro se houver erro
+                    continue; 
                 }
     
                 userController.getListBooks(user).add(book);
@@ -342,7 +325,7 @@ public class UIController extends Application implements IUIController
                 loan.setDateDelivery(LocalDate.now());
                 if (LocalDate.now().isAfter(loan.getDateReturn())) {
                     long daysLate = ChronoUnit.DAYS.between(loan.getDateReturn(), LocalDate.now());
-                    double fine = daysLate * 2.5; // Supondo uma multa de 2.5 por dia
+                    double fine = daysLate * 0.5; 
                     Alert fineAlert = new Alert(Alert.AlertType.INFORMATION, 
                         "Livro " + book.getTitle() + " está atrasado! Multa: R$ " + fine, 
                         ButtonType.OK);

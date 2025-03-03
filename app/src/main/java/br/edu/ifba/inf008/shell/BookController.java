@@ -14,7 +14,6 @@ public class BookController implements IBookController {
     public IBook createBook(String title, String author, String ISBN, String genre, String year) {
         if (requestCreateBook(title, author, ISBN, genre, year)) {
             IBook book = new Book(title, author, ISBN, genre, year);
-            //addBook(book);
             return book;
         }
         return null;
@@ -45,14 +44,6 @@ public class BookController implements IBookController {
                isValidGenre(genre) && isValidPublicationYear(year);
     }
 
-    //public ArrayList<IBook> getBookList() {return bookList;}
-
-    /* 
-    public void addBook(IBook book) {
-        if (book != null) {
-            bookList.add(book);
-        }
-    }*/
 
     public boolean thisBookExists(IIOController ioController, IBook book) {
         return ioController.getListBook().contains(book);

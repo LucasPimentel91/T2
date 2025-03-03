@@ -17,7 +17,6 @@ public interface ILoan {
     public void late();
     public String generateLoanId();
     public String getID();
-    //public void teste();
     public StringProperty userProperty();
     public StringProperty bookProperty();
     public StringProperty dateLoanProperty();

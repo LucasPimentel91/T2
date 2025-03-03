@@ -70,7 +70,6 @@ public class Loan implements ILoan, Serializable {
         this.status = 1;
     }
     
-    //public void teste(){ System.out.println(loanDate);}
 
     public StringProperty userProperty() {
         return new SimpleStringProperty(userInstance.getName());

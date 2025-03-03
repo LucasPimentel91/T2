@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class LoanController implements ILoanController {
-    //private IIOController ioController;
-    //private ArrayList<ILoan> loanList;
-    //private int id = 1;
-
-    //public LoanController() {   loanList = new ArrayList<ILoan>(); }
 
     public boolean isValidUser(IUser user) {
         var ioController = Core.getInstance().getIOController();
         var userController = Core.getInstance().getUserController();
         if(user != null && user instanceof IUser && userController.thisUserExists(ioController, user)) {
-            //O user não está sendo encontrado na lista de usuarios no userController.
             return true;
         }
        return false;
@@ -38,7 +32,7 @@ public class LoanController implements ILoanController {
     }
 
     public LocalDate setDateReturn() {
-        return LocalDate.now().plusDays(7);
+        return LocalDate.now().plusDays(14);
     }
 
 
@@ -46,10 +40,8 @@ public class LoanController implements ILoanController {
         if (requestSetLoan(user, book)) {
             var dateReturn = setDateReturn();
             ILoan loan = new Loan(user, book, dateLoan, dateReturn);
-            //addLoan(loan);
             return loan;
         }
-        //System.out.println("Aqui deu nada!!!");var ioController = Core.getInstance().getIOController();
         return null;
     }
 
@@ -71,16 +63,5 @@ public class LoanController implements ILoanController {
         }
         return null;
     }
-
-    /* 
-    public ArrayList<ILoan> getLoanList() {
-        return loanList;
-    }
-
-    public void addLoan(ILoan loan) {
-        if (loan != null) {
-            loanList.add(loan);
-        }
-    }*/
 
 }
