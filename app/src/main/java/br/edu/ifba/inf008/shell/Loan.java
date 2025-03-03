@@ -2,12 +2,14 @@ package br.edu.ifba.inf008.shell;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import br.edu.ifba.inf008.interfaces.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Loan implements ILoan, Serializable {
+    private String id;
     private IUser userInstance;
     private IBook bookInstance;
     private int status;
@@ -17,10 +19,19 @@ public class Loan implements ILoan, Serializable {
     
     
     public Loan(IUser userInstance, IBook bookInstance, LocalDate loanDate, LocalDate returnDate) {
+        this.id = generateLoanId();
         this.userInstance = userInstance;
         this.bookInstance = bookInstance;
         this.loanDate = loanDate;
         this.returnDate = returnDate;
+    }
+
+    public String generateLoanId() {
+        return UUID.randomUUID().toString();
+    }
+
+    public String getID(){
+        return id;
     }
 
     public IUser getUser(){
@@ -39,6 +50,10 @@ public class Loan implements ILoan, Serializable {
         return returnDate;
     }
 
+    public LocalDate getDateDelivery(){
+        return deliveryDate;
+    }
+
     public int getStatus(){
         return status;
     }
@@ -48,11 +63,11 @@ public class Loan implements ILoan, Serializable {
     }
 
     public void returned(){
-        this.status = 1;
+        this.status = 0;
     }
 
     public void late(){
-        this.status = 0;
+        this.status = 1;
     }
     
     //public void teste(){ System.out.println(loanDate);}

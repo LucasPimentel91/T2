@@ -55,7 +55,14 @@ public class ReportPlugin implements IPlugin {
         TableColumn<ILoan, String> dateReturnCol = new TableColumn<>("Data de Retorno");
         dateReturnCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateReturn().toString()));
 
-        Collections.addAll(reportTable.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol);
+        TableColumn<ILoan, String> dateDeliveryCol = new TableColumn<>("Data de Entrega");
+        dateDeliveryCol.setCellValueFactory(data -> {
+        LocalDate deliveryDate = data.getValue().getDateDelivery();
+        return new SimpleStringProperty(deliveryDate != null ? deliveryDate.toString() : "");
+        });
+
+
+        Collections.addAll(reportTable.getColumns(), userCol, bookCol, dateLoanCol, dateReturnCol, dateDeliveryCol);
 
         VBox layout = new VBox(10, reportTable);
         Scene scene = new Scene(layout, 500, 400);
@@ -79,7 +86,7 @@ public class ReportPlugin implements IPlugin {
             // Garante que a lista está atualizada
             ObservableList<ILoan> loanLateListObs = FXCollections.observableArrayList(
                 ioController.getLoanListObs().stream()
-                    .filter(loan -> loan.getStatus() == 0) // 0 representa "atrasado"
+                    .filter(loan -> loan.getStatus() == 1 && loan.getDateDelivery() == null) // 0 representa "atrasado"
                     .collect(Collectors.toList())
             );
     

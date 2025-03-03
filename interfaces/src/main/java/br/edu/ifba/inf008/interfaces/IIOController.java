@@ -18,6 +18,7 @@ public interface IIOController
     public void addLoan(ILoan loan);
     public void saveData();
     public void loadData();
+    public void updateLoan(ILoan loan);
     //private void updateObservableLists();
     /* 
     public ObservableList<IBook> setBookListObs();

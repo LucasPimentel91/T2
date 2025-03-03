@@ -89,6 +89,18 @@ public class IOController implements IIOController, Serializable {
         }
     }
 
+    public void updateLoan(ILoan loan) {
+        for (int i = 0; i < loanList.size(); i++) {
+            if (loanList.get(i).getID().equals(loan.getID())) { // Supondo que cada empréstimo tenha um ID único
+                loanList.set(i, loan);
+                loanListObs.set(i, loan);
+                saveData(); // Salva os dados atualizados
+                return;
+            }
+        }
+    }
+    
+
     @SuppressWarnings("unchecked")
     public void loadData() {
         File file = new File(FILE_PATH);

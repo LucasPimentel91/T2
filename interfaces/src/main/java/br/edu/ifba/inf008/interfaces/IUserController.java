@@ -9,6 +9,7 @@ public interface IUserController {
     public boolean requestCreateUser(String name, String email, String password);
     public IUser createUser(String name, String email, String password); 
     public boolean thisUserExists(IIOController iioController, IUser user);
+    public IUser findUserByEmail(String email);
     /* 
     public ArrayList<IUser> getUserList();
     public void addUser(IUser user);

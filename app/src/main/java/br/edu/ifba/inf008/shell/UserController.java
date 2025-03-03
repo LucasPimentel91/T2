@@ -50,4 +50,16 @@ public class UserController implements IUserController {
     public ArrayList<IBook> getListBooks(IUser user){
         return user.myListBooks();
     }
+
+    public IUser findUserByEmail(String email) {
+        var ioController = Core.getInstance().getIOController();
+        
+        for (IUser user : ioController.getListUser()) {
+            if (email != null && email.equals(user.getEmail())) {
+                return user;
+            }
+        }
+        
+        return null; // Retorna null caso o usuário não seja encontrado
+    }
 }

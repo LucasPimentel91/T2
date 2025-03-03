@@ -4,6 +4,7 @@ import br.edu.ifba.inf008.interfaces.*;
 import br.edu.ifba.inf008.shell.PluginController;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.collections.FXCollections;
@@ -54,6 +56,8 @@ public class UIController extends Application implements IUIController
         menuBar.getMenus().get(0).getItems().add(menuItem2);
         MenuItem menuItem3 = createMenuItem("Empréstimo", "Fazer empréstimo");
         menuBar.getMenus().get(0).getItems().add(menuItem3);
+        MenuItem menuItem4 = createMenuItem("Empréstimo", "Devolução");
+        menuBar.getMenus().get(0).getItems().add(menuItem4);
         menuItem.setOnAction(e -> {
             openBookTab();
         });
@@ -62,6 +66,9 @@ public class UIController extends Application implements IUIController
         });
         menuItem3.setOnAction(e -> {
             openLoanTab();
+        });
+        menuItem4.setOnAction(e -> {
+            openLoanReturnTab();
         });
         VBox vBox = new VBox(menuBar);
 
@@ -291,17 +298,74 @@ public class UIController extends Application implements IUIController
     }
 
     public void openLoanReturnTab() {
-        //implementar tela de devolução
+    Stage stage = new Stage();
+    stage.setTitle("Devolução de Livros");
 
-        /*
-         Perguntar email do usuário;
-         Carregar a lista de livros que tem esse usuario vinculado;
-         Botão: Devolver esses livros?
-         Yes - Retirar livros da lista pessoal do usuário, trocar stutus de emprestado dos livros, e adicionar uma coluna de data de entrega no livro no loan.
-            se atrasado (data atual > data de retorno), gerar cálculo de multa e mostrar na tela.
-        obs: tem que impactar nos relatórios de empréstimo e atrasado.
-         */
-    }
+    VBox layout = new VBox(10);
+    layout.setPadding(new Insets(10));
+
+    Label emailLabel = new Label("Digite o e-mail do usuário:");
+    TextField emailField = new TextField();
+    Button searchButton = new Button("Buscar Livros");
+
+    ListView<IBook> bookListView = new ListView<>();
+    bookListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+    Button returnButton = new Button("Devolver Selecionados");
+    returnButton.setDisable(true);
+
+    searchButton.setOnAction(e -> {
+        String email = emailField.getText();
+        IUser user = userController.findUserByEmail(email);
+        if (user == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Usuário não encontrado!", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        
+        ObservableList<IBook> userBooks = FXCollections.observableArrayList(userController.getListBooks(user));
+        bookListView.setItems(userBooks);
+        returnButton.setDisable(userBooks.isEmpty());
+    });
+
+    returnButton.setOnAction(e -> {
+        ObservableList<IBook> selectedBooks = bookListView.getSelectionModel().getSelectedItems();
+        if (selectedBooks.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Nenhum livro selecionado!", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+
+        for (IBook book : selectedBooks) {
+            ILoan loan = loanController.findLoanByBook(book);
+            if (loan != null) {
+                loan.setDateDelivery(LocalDate.now());
+                if (LocalDate.now().isAfter(loan.getDateReturn())) {
+                    long daysLate = ChronoUnit.DAYS.between(loan.getDateReturn(), LocalDate.now());
+                    double fine = daysLate * 2.5; // Supondo uma multa de 2.5 por dia
+                    Alert fineAlert = new Alert(Alert.AlertType.INFORMATION, 
+                        "Livro " + book.getTitle() + " está atrasado! Multa: R$ " + fine, 
+                        ButtonType.OK);
+                    fineAlert.showAndWait();
+                }
+                
+                userController.getListBooks(loan.getUser()).remove(book);
+                bookController.returnBook(book);
+                ioController.updateLoan(loan);
+            }
+        }
+        
+        Alert success = new Alert(Alert.AlertType.INFORMATION, "Livros devolvidos com sucesso!", ButtonType.OK);
+        success.showAndWait();
+        stage.close();
+    });
+
+    layout.getChildren().addAll(emailLabel, emailField, searchButton, bookListView, returnButton);
+    Scene scene = new Scene(layout, 500, 400);
+    stage.setScene(scene);
+    stage.show();
+}
+
 
 }
 

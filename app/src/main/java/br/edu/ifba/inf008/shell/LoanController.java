@@ -62,6 +62,15 @@ public class LoanController implements ILoanController {
         }
     }
     
+    public ILoan findLoanByBook(IBook book){
+        var ioController = Core.getInstance().getIOController();
+        for (ILoan loan : ioController.getListLoan()){
+            if (book != null && book.equals(loan.getBook())) {
+                return loan;
+            }
+        }
+        return null;
+    }
 
     /* 
     public ArrayList<ILoan> getLoanList() {
